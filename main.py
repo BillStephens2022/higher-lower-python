@@ -2,6 +2,9 @@ from art import logo, vs
 from game_data import data
 import random
 
+score = 0
+game_over = False
+
 def pick_random():
     pick_1 = random.choice(data)
     pick_2 = random.choice(data)
@@ -18,16 +21,26 @@ def pick_random():
     
     return result
 
-def check_choice(user_choice, answer):
+def check_choice(user_choice, answer, score):
     if user_choice == answer:
-        return "you are right"
+        score += 1
+        message = f"That's correct. Your total score is: {score}"
+        return message, False, score
     else:
-        return "you are wrong"
-
-
+        message = f"Sorry, that's wrong. Your final score is: {score}"
+        return message, True, score
 
 print(logo)
-answer = pick_random()
-user_choice = (input("Who has more followers?  Type 'A' or 'B': ")).upper()
-print(user_choice)
-print(check_choice(user_choice, answer))
+
+def play_game(game_over, score):
+    while not game_over:
+        answer = pick_random()
+        user_choice = (input("Who has more followers?  Type 'A' or 'B': ")).upper()
+        round_result = check_choice(user_choice, answer, score)
+        message = round_result[0]
+        score = round_result[2]
+        print(message)
+        game_over = round_result[1]
+        
+play_game(game_over, score)
+
